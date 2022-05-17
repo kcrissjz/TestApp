@@ -2,6 +2,8 @@ package com.example.testapp.ui.screens
 
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,14 +19,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.testapp.ui.components.NotificationContent
-import com.example.testapp.ui.components.SwiperContent
+import com.example.testapp.model.entity.ArticleEntity
+import com.example.testapp.ui.components.*
 import com.example.testapp.ui.components.TopAppBar
+import com.example.testapp.viewmodel.ArticleViewModel
 import com.example.testapp.viewmodel.MainViewmodel
+import com.example.testapp.viewmodel.VideoViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun StudyScreen(vm: MainViewmodel = viewModel()) {
+fun StudyScreen(
+  vm: MainViewmodel = viewModel(),
+  articleViewModel: ArticleViewModel = viewModel(),
+  videoViewModel: VideoViewModel = viewModel()
+) {
   Column(modifier = Modifier) {
     //标题栏
     TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -123,10 +131,27 @@ fun StudyScreen(vm: MainViewmodel = viewModel()) {
       }
     }
 
-    SwiperContent(vm)
-    NotificationContent(vm = vm)
+    LazyColumn() {
+      item {
+        SwiperContent(vm)
+      }
+      item {
+        NotificationContent(vm = vm)
+      }
+      if (vm.typeIndex == 0) {
+        items(articleViewModel.list) { article ->
+          ArticleItem(article)
+        }
+      } else {
+        items(videoViewModel.list) { video ->
+          VideoItem(video)
+        }
+      }
+    }
+
   }
 }
+
 
 @Preview
 @Composable
