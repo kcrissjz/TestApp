@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.testapp.ui.components.NotificationContent
 import com.example.testapp.ui.components.SwiperContent
 import com.example.testapp.ui.components.TopAppBar
 import com.example.testapp.viewmodel.MainViewmodel
@@ -123,6 +124,7 @@ fun StudyScreen(vm: MainViewmodel = viewModel()) {
     }
 
     SwiperContent(vm)
+    NotificationContent(vm = vm)
   }
 }
 

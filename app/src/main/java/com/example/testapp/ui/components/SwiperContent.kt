@@ -49,7 +49,7 @@ fun SwiperContent(vm:MainViewmodel) {
         count = virtualCount,
         state = pagerState,
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(8.dp))
     ) { index ->
         val actualIndex =  index % actualCount

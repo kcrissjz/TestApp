@@ -58,4 +58,6 @@ class MainViewmodel : ViewModel() {
     SwiperEntity("https://docs.bughub.icu/compose/assets/banner5.jpg"),
   )
 
+  val notificationData = listOf("1dsfdsfad是大地发生的","2fdjfgdnv你的伤口江南是假的"
+  ,"3是大姐离开的少女的防护文化","4阿萨德地方撒dsfjsdifoasdfcvx","5姑父后空翻个会发光的表面v")
 }
