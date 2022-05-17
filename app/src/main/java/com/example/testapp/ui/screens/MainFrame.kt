@@ -1,15 +1,18 @@
 package com.example.testapp.ui.screens
 
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.testapp.model.entity.NavigationItem
+import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
 fun MainFrame() {
@@ -22,7 +25,10 @@ fun MainFrame() {
     mutableStateOf(0)
   }
   Scaffold(bottomBar = {
-    BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
+    BottomNavigation(
+      backgroundColor = MaterialTheme.colors.surface,
+      modifier = Modifier.navigationBarsPadding()
+    ) {
       navigationItems.forEachIndexed { index, navigationItem ->
         BottomNavigationItem(
           selected = currentNavigationIndex == index,
@@ -41,7 +47,11 @@ fun MainFrame() {
       }
     }
   }) {
-    Text(text = "current item :${currentNavigationIndex}")
+    when (currentNavigationIndex) {
+      0 -> StudyScreen()
+      1 -> TaskScreen()
+      2 -> MineScreen()
+    }
   }
 }
 

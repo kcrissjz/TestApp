@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    //
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -58,4 +59,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    var accompanist_version = "0.24.3-alpha"
+    def lifecycle_version = "2.4.1"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"//状态栏
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+
+
+    implementation "androidx.compose.material:material-icons-extended:1.1.1"//图标扩展
+    implementation ("io.coil-kt:coil-compose:2.0.0-rc01")//图片加载
+
 }
