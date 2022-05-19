@@ -1,6 +1,7 @@
 package com.example.testapp.ui.screens
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,7 +32,8 @@ import com.example.testapp.viewmodel.VideoViewModel
 fun StudyScreen(
   vm: MainViewmodel = viewModel(),
   articleViewModel: ArticleViewModel = viewModel(),
-  videoViewModel: VideoViewModel = viewModel()
+  videoViewModel: VideoViewModel = viewModel(),
+  onNavigateToArticle:()->Unit = {}
 ) {
   Column(modifier = Modifier) {
     //标题栏
@@ -140,7 +142,9 @@ fun StudyScreen(
       }
       if (vm.typeIndex == 0) {
         items(articleViewModel.list) { article ->
-          ArticleItem(article)
+          ArticleItem(article, modifier = Modifier.clickable {
+            onNavigateToArticle()
+          })
         }
       } else {
         items(videoViewModel.list) { video ->
@@ -150,12 +154,5 @@ fun StudyScreen(
     }
 
   }
-}
-
-
-@Preview
-@Composable
-fun StudyScreenPreview() {
-  StudyScreen()
 }
 

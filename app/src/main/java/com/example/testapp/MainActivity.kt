@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import com.example.testapp.ui.components.NavHostApp
 import com.example.testapp.ui.screens.MainFrame
 import com.example.testapp.ui.theme.TestAppTheme
 
@@ -41,7 +42,8 @@ class MainActivity : ComponentActivity() {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
 //          Greeting("Android")
-          MainFrame()
+//          MainFrame()
+          NavHostApp()
         }
       }
     }

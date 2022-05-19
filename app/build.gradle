@@ -68,6 +68,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"//状态栏
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
@@ -75,5 +76,6 @@ dependencies {
 
     implementation "androidx.compose.material:material-icons-extended:1.1.1"//图标扩展
     implementation ("io.coil-kt:coil-compose:2.0.0-rc01")//图片加载
+
 
 }

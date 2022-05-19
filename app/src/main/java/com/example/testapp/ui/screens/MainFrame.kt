@@ -17,11 +17,11 @@ import com.example.testapp.model.entity.NavigationItem
 import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
-fun MainFrame() {
+fun MainFrame(onNavigateToArticle:()->Unit = {}) {
   val navigationItems = listOf(
     NavigationItem("学习", icon = Icons.Filled.Home),
     NavigationItem("任务", icon = Icons.Default.DateRange),
-    NavigationItem("我的", icon = Icons.Default.Person)
+    NavigationItem("我的", icon = Icons.Default.Person),
   )
   var currentNavigationIndex by remember {
     mutableStateOf(0)
@@ -51,7 +51,7 @@ fun MainFrame() {
   }) {
     Box(modifier = Modifier.padding(it)){
       when (currentNavigationIndex) {
-        0 -> StudyScreen()
+        0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
         1 -> TaskScreen()
         2 -> MineScreen()
       }
