@@ -19,6 +19,7 @@ import com.example.testapp.ui.theme.Blue200
 import com.example.testapp.ui.theme.Blue700
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+val AppBarHeight = 56.dp
 
 @Composable
 fun TopAppBar(modifier: Modifier = Modifier,content: @Composable () -> Unit) {
@@ -27,7 +28,6 @@ fun TopAppBar(modifier: Modifier = Modifier,content: @Composable () -> Unit) {
     systemUiController.setStatusBarColor(Color.Transparent)
   }
 
-  val AppBarHeight = 56.dp
   //px转dp
   val statusBarHeightDp = with(LocalDensity.current){
     30.dp
