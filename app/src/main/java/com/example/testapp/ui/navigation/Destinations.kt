@@ -6,5 +6,4 @@ sealed class Destinations(val route:String){
   //文章详情页面
   object ArticleDetail:Destinations("ArticleDetail")
 
-  object TaskScreen:Destinations("TaskScreen")
 }

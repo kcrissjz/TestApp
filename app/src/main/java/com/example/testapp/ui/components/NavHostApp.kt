@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import com.example.testapp.ui.navigation.Destinations
 import com.example.testapp.ui.screens.ArticleDetailScreen
 import com.example.testapp.ui.screens.MainFrame
-import com.example.testapp.ui.screens.TaskScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -33,6 +32,9 @@ fun NavHostApp() {
       MainFrame(onNavigateToArticle = {
         navController.navigate(Destinations.ArticleDetail.route)
       })
+    }
+    composable(Destinations.ArticleDetail.route) {
+      ArticleDetailScreen()
     }
   }
 }
