@@ -34,7 +34,9 @@ fun NavHostApp() {
       })
     }
     composable(Destinations.ArticleDetail.route) {
-      ArticleDetailScreen()
+      ArticleDetailScreen(onBack = {
+        navController.popBackStack()
+      })
     }
   }
 }

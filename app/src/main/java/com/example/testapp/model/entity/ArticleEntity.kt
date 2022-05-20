@@ -4,5 +4,6 @@ data class ArticleEntity(
   val title: String,
   val source: String,
   val timestamp:String,
-  val tag:String
+  val tag:String?="1",
+  var content: String? = ""
 )

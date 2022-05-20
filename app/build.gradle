@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':myWebView')
     //
 
 
@@ -76,6 +77,5 @@ dependencies {
 
     implementation "androidx.compose.material:material-icons-extended:1.1.1"//图标扩展
     implementation ("io.coil-kt:coil-compose:2.0.0-rc01")//图片加载
-
 
 }
