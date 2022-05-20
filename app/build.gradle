@@ -17,6 +17,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        ndk {
+            abiFilters "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -78,4 +81,18 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:1.1.1"//图标扩展
     implementation ("io.coil-kt:coil-compose:2.0.0-rc01")//图片加载
 
+    //播放器
+    implementation 'com.tencent.liteav:LiteAVSDK_Player:latest.release'
+    //datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    def retrofit = "2.9.0"
+    //网络请求框架
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    //GSON
+//    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    //moshi
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
+
+    def moshi_version = "1.13.0"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 }

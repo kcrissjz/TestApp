@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import com.example.testapp.ui.navigation.Destinations
 import com.example.testapp.ui.screens.ArticleDetailScreen
 import com.example.testapp.ui.screens.MainFrame
+import com.example.testapp.ui.screens.VideoDetailScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -29,12 +30,21 @@ fun NavHostApp() {
         slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
       }
     ) {
-      MainFrame(onNavigateToArticle = {
-        navController.navigate(Destinations.ArticleDetail.route)
-      })
+      MainFrame(
+        onNavigateToArticle = {
+          navController.navigate(Destinations.ArticleDetail.route)
+        },
+        onNavigateToVideo = {
+          navController.navigate(Destinations.VideoDetail.route)
+        })
     }
     composable(Destinations.ArticleDetail.route) {
       ArticleDetailScreen(onBack = {
+        navController.popBackStack()
+      })
+    }
+    composable(Destinations.VideoDetail.route) {
+      VideoDetailScreen(onBack = {
         navController.popBackStack()
       })
     }

@@ -25,9 +25,9 @@ import coil.compose.AsyncImage
 import com.example.testapp.model.entity.VideoEntity
 
 @Composable
-fun VideoItem(video: VideoEntity) {
+fun VideoItem(video: VideoEntity,modifier: Modifier=Modifier) {
   ConstraintLayout(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
       .padding(8.dp)
   ) {
