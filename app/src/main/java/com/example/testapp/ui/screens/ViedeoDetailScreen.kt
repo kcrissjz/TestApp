@@ -13,14 +13,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.ui.components.TopAppBar
+import com.example.testapp.ui.components.video.VideoView
 import com.example.testapp.viewmodel.ArticleViewModel
 import com.example.testapp.viewmodel.VideoViewModel
+import com.tencent.rtmp.TXVodPlayer
 import kotlinx.coroutines.launch
 import org.kcriss.mywebview.MyWebView
 import org.kcriss.mywebview.rememberWebViewState
@@ -29,7 +32,12 @@ import org.kcriss.mywebview.rememberWebViewState
 @Composable
 fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel()) {
   val webViewState = rememberWebViewState(data = vm.videoDesc)
-  
+  val vodPlayer = TXVodPlayer(LocalContext.current)
+
+  LaunchedEffect(vodPlayer ){
+    vodPlayer.startPlay("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
+  }
+
   Column {
     TopAppBar() {
       ConstraintLayout(modifier = Modifier.fillMaxHeight()) {
@@ -65,6 +73,7 @@ fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel())
 
     //视频区域
     Box(modifier = Modifier.height(200.dp)) {
+      VideoView(videoPlayer = vodPlayer)
     }
     //简介
     MyWebView(webViewState = webViewState)
