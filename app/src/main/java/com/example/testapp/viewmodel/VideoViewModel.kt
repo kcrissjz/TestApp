@@ -62,6 +62,7 @@ class VideoViewModel :ViewModel(){
 
   var videoUrl by mutableStateOf("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
   var coverUrl by mutableStateOf("https://docs.bughub.icu/compose/assets/banner3.webp")
+  var title by mutableStateOf("title")
 //  var videoUrl by mutableStateOf("https://video.bnruevn.com/TS/TS005/TS005.m3u8")
     private set
 

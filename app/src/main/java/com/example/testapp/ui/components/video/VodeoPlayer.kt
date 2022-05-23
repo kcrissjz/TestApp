@@ -1,16 +1,18 @@
 package com.example.testapp.ui.components.video
 
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,16 +20,23 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import okhttp3.internal.wait
 import java.util.*
 
 
 @Composable
 fun VodeoPlayer(vodController: VodController) {
+  val systemUiController = rememberSystemUiController()
+  val configuration = LocalConfiguration.current
 
+  val context = LocalContext.current
   var timeFormatText by remember {
     mutableStateOf("")
   }
@@ -37,7 +46,6 @@ fun VodeoPlayer(vodController: VodController) {
   LaunchedEffect(vodController.playValue.currentPosition) {
     var positon = vodController.playValue.currentPosition
     val duration = vodController.playValue.duration
-
     //格式化时间
     timeFormatText = String.format(
       "%02d:%02d:%02d / %02d:%02d:%02d ",
@@ -74,6 +82,9 @@ fun VodeoPlayer(vodController: VodController) {
     showControlBar = !showControlBar
   }
   ) {
+    systemUiController.isSystemBarsVisible =
+      configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
     //视频播放区域
     VideoView(videoPlayer = vodController.vodPlayer)
 
@@ -116,8 +127,36 @@ fun VodeoPlayer(vodController: VodController) {
     //视频控制层
     if (showControlBar)
       Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-        Spacer(modifier = Modifier.height(1.dp))
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+          Spacer(modifier = Modifier.height(1.dp))
+        } else {
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(45.dp)
+              .background(
+                Brush.verticalGradient(
+                  listOf(
+                    Color.Black, Color.Transparent
+                  )
+                )
+              )
+          ) {
+            IconButton(onClick = {
+              context.findActivity()?.requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }) {
+              Icon(
+                imageVector = Icons.Default.ArrowBackIos,
+                contentDescription = null,
+                tint = Color.White
+              )
+            }
 
+            Text(text = vodController.title, color = Color.White)
+          }
+        }
         Row(
           modifier = Modifier
             .fillMaxWidth()
@@ -161,21 +200,44 @@ fun VodeoPlayer(vodController: VodController) {
             modifier = Modifier.weight(1f)
           )
           Spacer(modifier = Modifier.width(8.dp))
-          //事件显示
+          //时间显示
           Text(text = timeFormatText, fontSize = 14.sp, color = Color.White)
           Spacer(modifier = Modifier.width(2.dp))
           //控制全屏
-          IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-              imageVector = Icons.Default.Fullscreen,
-              contentDescription = null,
-              tint = Color.White
-            )
+          IconButton(onClick = {
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+              context.findActivity()?.requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+              context.findActivity()?.requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+          }) {
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+              Icon(
+                imageVector = Icons.Default.Fullscreen,
+                contentDescription = null,
+                tint = Color.White
+              )
+            } else {
+              Icon(
+                imageVector = Icons.Default.FullscreenExit,
+                contentDescription = null,
+                tint = Color.White
+              )
+            }
+
           }
           Spacer(modifier = Modifier.width(8.dp))
 
         }
       }
   }
+}
+
+fun Context.findActivity(): Activity? = when (this) {
+  is Activity -> this
+  is ContextWrapper -> baseContext.findActivity()
+  else -> null
 }
 
