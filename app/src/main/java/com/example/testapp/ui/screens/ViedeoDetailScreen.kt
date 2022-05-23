@@ -21,6 +21,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.ui.components.TopAppBar
 import com.example.testapp.ui.components.video.VideoView
+import com.example.testapp.ui.components.video.VodeoPlayer
+import com.example.testapp.ui.components.video.rememberVodController
 import com.example.testapp.viewmodel.ArticleViewModel
 import com.example.testapp.viewmodel.VideoViewModel
 import com.tencent.rtmp.TXVodPlayer
@@ -32,10 +34,10 @@ import org.kcriss.mywebview.rememberWebViewState
 @Composable
 fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel()) {
   val webViewState = rememberWebViewState(data = vm.videoDesc)
-  val vodPlayer = TXVodPlayer(LocalContext.current)
+  val vodController = rememberVodController()
 
-  LaunchedEffect(vodPlayer ){
-    vodPlayer.startPlay("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
+  LaunchedEffect(vodController) {
+    vodController.startPlay(vm.videoUrl)
   }
 
   Column {
@@ -65,19 +67,16 @@ fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel())
               centerTo(parent)
             }
         )
-
       }
-
-
     }
 
     //视频区域
     Box(modifier = Modifier.height(200.dp)) {
-      VideoView(videoPlayer = vodPlayer)
+      VodeoPlayer(vodController)
     }
     //简介
     MyWebView(webViewState = webViewState)
-    
+
   }
 
 }
