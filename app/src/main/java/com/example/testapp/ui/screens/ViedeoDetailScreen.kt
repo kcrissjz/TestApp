@@ -34,10 +34,10 @@ import org.kcriss.mywebview.rememberWebViewState
 @Composable
 fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel()) {
   val webViewState = rememberWebViewState(data = vm.videoDesc)
-  val vodController = rememberVodController()
+  val vodController = rememberVodController(coverUrl =  vm.coverUrl, videoUrl = vm.videoUrl)
 
   LaunchedEffect(vodController) {
-    vodController.startPlay(vm.videoUrl)
+//    vodController.startPlay(vm.videoUrl)
   }
 
   Column {

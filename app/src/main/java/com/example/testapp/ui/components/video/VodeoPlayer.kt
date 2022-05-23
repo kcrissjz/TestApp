@@ -5,22 +5,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import java.util.*
 
 
@@ -62,19 +63,56 @@ fun VodeoPlayer(vodController: VodController) {
   ) {
     timer?.cancel()
     timer = null
-    if (!showControlBar){
+    if (!showControlBar) {
       timer = Timer()
-      timer?.schedule(object :TimerTask(){
+      timer?.schedule(object : TimerTask() {
         override fun run() {
-            showControlBar = false
+          showControlBar = false
         }
-      },3000)
+      }, 3000)
     }
     showControlBar = !showControlBar
   }
   ) {
     //视频播放区域
     VideoView(videoPlayer = vodController.vodPlayer)
+
+    //视频封面
+    if (vodController.playValue.state == PlayState.None) {
+      Box() {
+        AsyncImage(
+          model = vodController.coverUrl,
+          contentDescription = null,
+          contentScale = ContentScale.FillBounds,
+          modifier = Modifier
+            .fillMaxWidth()
+        )
+        IconButton(
+          onClick = {
+            vodController.startPlay(vodController.videoUrl)
+          },
+          modifier = Modifier.align(
+            Alignment.Center
+          )
+        ) {
+          Icon(
+            imageVector = Icons.Default.PlayCircle,
+            contentDescription = null,
+            modifier = Modifier.size(60.dp)
+          )
+        }
+      }
+    }
+
+    //loading
+    if (vodController.playValue.state == PlayState.Loading) {
+      CircularProgressIndicator(
+        modifier = Modifier
+          .align(Alignment.Center)
+          .size(60.dp)
+      )
+    }
+
     //视频控制层
     if (showControlBar)
       Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
