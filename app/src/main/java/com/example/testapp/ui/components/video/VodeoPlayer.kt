@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,9 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import okhttp3.internal.wait
@@ -62,6 +66,30 @@ fun VodeoPlayer(vodController: VodController) {
     mutableStateOf(false)
   }
   var timer: Timer? = null
+  val  lifecycleOwner = LocalLifecycleOwner.current
+  //监听生命周期
+  DisposableEffect(vodController){
+    val lifecycleEventObserver = LifecycleEventObserver{_,event->
+      when(event){
+        Lifecycle.Event.ON_RESUME ->vodController.resume()
+        Lifecycle.Event.ON_PAUSE -> vodController.pause()
+        else ->{}
+      }
+    }
+    lifecycleOwner.lifecycle.addObserver(lifecycleEventObserver)
+    onDispose {
+      lifecycleOwner.lifecycle.removeObserver(lifecycleEventObserver)
+      vodController.stopPlay()
+    }
+  }
+
+  //当处于横屏的状态时，需要监听物理返回键 回到竖屏状态
+  BackHandler(configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+      context.findActivity()?.requestedOrientation =
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+  }
 
   Box(modifier = Modifier.clickable(
     interactionSource = remember {
@@ -92,7 +120,7 @@ fun VodeoPlayer(vodController: VodController) {
     if (vodController.playValue.state == PlayState.None) {
       Box() {
         AsyncImage(
-          model = vodController.coverUrl,
+          model = vodController.playValue.coverUrl,
           contentDescription = null,
           contentScale = ContentScale.FillBounds,
           modifier = Modifier
@@ -100,7 +128,7 @@ fun VodeoPlayer(vodController: VodController) {
         )
         IconButton(
           onClick = {
-            vodController.startPlay(vodController.videoUrl)
+            vodController.startPlay()
           },
           modifier = Modifier.align(
             Alignment.Center
@@ -154,7 +182,7 @@ fun VodeoPlayer(vodController: VodController) {
               )
             }
 
-            Text(text = vodController.title, color = Color.White)
+            Text(text = vodController.playValue.title, color = Color.White)
           }
         }
         Row(

@@ -5,6 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.tencent.rtmp.ITXVodPlayListener
@@ -12,8 +15,7 @@ import com.tencent.rtmp.TXLiveConstants
 import com.tencent.rtmp.TXLivePlayConfig
 import com.tencent.rtmp.TXVodPlayer
 
-class VodController(context: Context,val coverUrl:String,val videoUrl:String,val title:String) {
-  val playValue = PlayerValue()
+class VodController(context: Context, val playValue: PlayerValue) {
   val vodPlayer = TXVodPlayer(context).apply {
     setVodListener(object : ITXVodPlayListener {
       override fun onPlayEvent(player: TXVodPlayer?, event: Int, param: Bundle?) {
@@ -45,8 +47,16 @@ class VodController(context: Context,val coverUrl:String,val videoUrl:String,val
   }
 
 
-  fun startPlay(url: String) {
-    vodPlayer.startPlay(url)
+  fun startPlay() {
+    vodPlayer.startPlay(playValue.videoUrl)
+  }
+
+  /**
+   * 配置改变后重新播放
+   */
+  fun restore() {
+    vodPlayer.setStartTime(playValue.currentPosition / 1000f)
+    startPlay()
   }
 
   fun stopPlay() {
@@ -70,10 +80,26 @@ class VodController(context: Context,val coverUrl:String,val videoUrl:String,val
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun rememberVodController(coverUrl:String,videoUrl:String,title: String): VodController {
+fun rememberVodController(coverUrl: String, videoUrl: String, title: String): VodController {
   val context = LocalContext.current
-  return remember {
-    VodController(context,coverUrl,videoUrl,title)
+  return rememberSaveable(saver = object : Saver<VodController, PlayerValue> {
+    override fun restore(value: PlayerValue): VodController? {
+      return VodController(context, value)
+    }
+
+    override fun SaverScope.save(value: VodController): PlayerValue {
+      return value.playValue
+    }
+
+  }) {
+    val playerValue = PlayerValue()
+    playerValue.videoUrl = videoUrl
+    playerValue.coverUrl = coverUrl
+    playerValue.title = title
+    return@rememberSaveable VodController(context, playerValue)
   }
+  //  remember {
+  //    VodController(context,coverUrl,videoUrl,title)
+  //  }
 }
 

@@ -46,6 +46,7 @@ fun VideoDetailScreen(onBack: () -> Unit = {}, vm: VideoViewModel = viewModel())
   }
 
   LaunchedEffect(configuration.orientation) {
+    vodController.restore()
     if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
       videoBoxModifier = Modifier
         .fillMaxWidth()
