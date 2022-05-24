@@ -27,6 +27,7 @@ import com.example.testapp.ui.components.TopAppBar
 import com.example.testapp.viewmodel.ArticleViewModel
 import com.example.testapp.viewmodel.MainViewmodel
 import com.example.testapp.viewmodel.VideoViewModel
+import com.google.accompanist.placeholder.placeholder
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -36,10 +37,10 @@ fun StudyScreen(
   videoViewModel: VideoViewModel = viewModel(),
   onNavigateToArticle: () -> Unit = {},
   onNavigateToVideo: () -> Unit = {},
-  onNavigateToHistory:()->Unit = {},
-  onLogout:()->Unit = {},
+  onNavigateToHistory: () -> Unit = {},
+  onLogout: () -> Unit = {},
 ) {
-  LaunchedEffect(Unit){
+  LaunchedEffect(Unit) {
     vm.categoryData()
   }
   Column(modifier = Modifier) {
@@ -107,7 +108,9 @@ fun StudyScreen(
           ) {
           Text(
             text = category.title,
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier
+              .padding(vertical = 8.dp)
+              .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
             fontSize = 14.sp
           )
         }
@@ -133,7 +136,8 @@ fun StudyScreen(
           text = {
             Text(
               text = type.title,
-              modifier = Modifier.padding(vertical = 8.dp),
+              modifier = Modifier
+                .padding(vertical = 8.dp),
               fontSize = 16.sp
             )
           },

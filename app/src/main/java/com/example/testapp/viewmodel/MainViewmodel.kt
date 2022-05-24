@@ -16,6 +16,8 @@ class MainViewmodel : ViewModel() {
 
   val homeService = HomeService.instance()
 
+  var categoryLoaded by mutableStateOf(false)
+    private set
   //
   var categories by mutableStateOf(listOf(Category("","")))
 
@@ -24,6 +26,7 @@ class MainViewmodel : ViewModel() {
     val categoryRes = homeService.category()
     if (categoryRes.code == 0) {
       categories = categoryRes.data
+      categoryLoaded = true
     } else {
       val msg = categoryRes.message
     }
