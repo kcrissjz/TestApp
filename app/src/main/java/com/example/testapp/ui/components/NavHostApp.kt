@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
 import com.example.testapp.compositionLocal.LocalUserViewModel
 import com.example.testapp.ui.navigation.Destinations
 import com.example.testapp.ui.screens.ArticleDetailScreen
@@ -21,8 +22,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 @Composable
 fun NavHostApp() {
   val navController = rememberAnimatedNavController()
+  val context = LocalContext.current
 //  ProvideWindowInsets() {
-    CompositionLocalProvider(LocalUserViewModel provides UserViewModel()) {
+    CompositionLocalProvider(LocalUserViewModel provides UserViewModel(context)) {
       val userViewModel = LocalUserViewModel.current
       AnimatedNavHost(
         navController = navController,
