@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +39,9 @@ fun StudyScreen(
   onNavigateToHistory:()->Unit = {},
   onLogout:()->Unit = {},
 ) {
+  LaunchedEffect(Unit){
+    vm.categoryData()
+  }
   Column(modifier = Modifier) {
     //标题栏
     TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {

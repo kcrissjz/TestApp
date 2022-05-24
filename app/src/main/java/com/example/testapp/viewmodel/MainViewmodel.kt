@@ -5,25 +5,29 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SmartDisplay
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.example.testapp.model.entity.Category
 import com.example.testapp.model.entity.DataType
 import com.example.testapp.model.entity.SwiperEntity
+import com.example.testapp.network.service.HomeService
 
 class MainViewmodel : ViewModel() {
 
+  val homeService = HomeService.instance()
+
   //
-  val categories by mutableStateOf(
-    listOf(
-      Category("思想政治"),
-      Category("法律法规"),
-      Category("职业道德"),
-      Category("诚信自律")
-    )
-  )
+  var categories by mutableStateOf(listOf(Category("","")))
+
+
+  suspend fun categoryData() {
+    val categoryRes = homeService.category()
+    if (categoryRes.code == 0) {
+      categories = categoryRes.data
+    } else {
+      val msg = categoryRes.message
+    }
+  }
 
   //分类下标
   var categoryIndex by mutableStateOf(0)
@@ -58,6 +62,11 @@ class MainViewmodel : ViewModel() {
     SwiperEntity("https://docs.bughub.icu/compose/assets/banner5.jpg"),
   )
 
-  val notificationData = listOf("1dsfdsfad是大地发生的","2fdjfgdnv你的伤口江南是假的"
-  ,"3是大姐离开的少女的防护文化","4阿萨德地方撒dsfjsdifoasdfcvx","5姑父后空翻个会发光的表面v")
+  val notificationData = listOf(
+    "1dsfdsfad是大地发生的",
+    "2fdjfgdnv你的伤口江南是假的",
+    "3是大姐离开的少女的防护文化",
+    "4阿萨德地方撒dsfjsdifoasdfcvx",
+    "5姑父后空翻个会发光的表面v"
+  )
 }
