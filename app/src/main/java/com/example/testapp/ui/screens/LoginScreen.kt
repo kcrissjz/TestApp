@@ -27,12 +27,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.R
+import com.example.testapp.compositionLocal.LocalUserViewModel
 import com.example.testapp.ui.theme.Blue700
+import com.example.testapp.viewmodel.UserViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onBack: () -> Unit = {}) {
+  val userViewModel = LocalUserViewModel.current
   var screenWith: Float
   var screenHeight: Float
   var userName by remember {
@@ -81,6 +85,13 @@ fun LoginScreen() {
           )
         )
     )
+    Icon(
+      imageVector = Icons.Default.Close,
+      contentDescription = null,
+      tint = Color.White,
+      modifier = Modifier
+        .padding(horizontal = 16.dp, vertical = 32.dp)
+        .clickable { onBack() })
     Column(
       modifier = Modifier.fillMaxSize(),
       horizontalAlignment = Alignment.CenterHorizontally,
@@ -145,7 +156,9 @@ fun LoginScreen() {
             cursorColor = Color.White
           )
         )
-        TextButton(onClick = { /*TODO*/ }) {
+        TextButton(onClick = {
+          userViewModel.login(userName, onBack = onBack)
+        }) {
           Text(text = "登录", color = Color.White)
         }
       }

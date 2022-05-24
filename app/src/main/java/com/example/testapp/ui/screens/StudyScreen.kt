@@ -33,8 +33,9 @@ fun StudyScreen(
   vm: MainViewmodel = viewModel(),
   articleViewModel: ArticleViewModel = viewModel(),
   videoViewModel: VideoViewModel = viewModel(),
-  onNavigateToArticle:()->Unit = {},
-  onNavigateToVideo:()->Unit = {},
+  onNavigateToArticle: () -> Unit = {},
+  onNavigateToVideo: () -> Unit = {},
+  onNavigateToHistory:()->Unit = {}
 ) {
   Column(modifier = Modifier) {
     //标题栏
@@ -67,7 +68,9 @@ fun StudyScreen(
       }
       Spacer(modifier = Modifier.width(8.dp))
 
-      Text(text = "学习\n进度", fontSize = 10.sp, color = Color.White)
+      Text(text = "学习\n进度", fontSize = 10.sp, color = Color.White, modifier = Modifier.clickable {
+        onNavigateToHistory()
+      })
       Spacer(modifier = Modifier.width(8.dp))
 
       Text(text = "26%", fontSize = 12.sp, color = Color.White)

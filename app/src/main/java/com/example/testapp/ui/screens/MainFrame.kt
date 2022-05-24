@@ -17,7 +17,11 @@ import com.example.testapp.model.entity.NavigationItem
 import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
-fun MainFrame(onNavigateToArticle:()->Unit = {},onNavigateToVideo:()->Unit) {
+fun MainFrame(
+  onNavigateToArticle: () -> Unit = {},
+  onNavigateToVideo: () -> Unit,
+  onNavigateToHistory: () -> Unit
+) {
   val navigationItems = listOf(
     NavigationItem("学习", icon = Icons.Filled.Home),
     NavigationItem("任务", icon = Icons.Default.DateRange),
@@ -49,9 +53,13 @@ fun MainFrame(onNavigateToArticle:()->Unit = {},onNavigateToVideo:()->Unit) {
       }
     }
   }) {
-    Box(modifier = Modifier.padding(it)){
+    Box(modifier = Modifier.padding(it)) {
       when (currentNavigationIndex) {
-        0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle, onNavigateToVideo = onNavigateToVideo)
+        0 -> StudyScreen(
+          onNavigateToArticle = onNavigateToArticle,
+          onNavigateToVideo = onNavigateToVideo,
+          onNavigateToHistory = onNavigateToHistory
+        )
         1 -> TaskScreen()
         2 -> MineScreen()
       }
