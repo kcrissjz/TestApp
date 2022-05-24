@@ -20,7 +20,8 @@ import com.google.accompanist.insets.ProvideWindowInsets
 fun MainFrame(
   onNavigateToArticle: () -> Unit = {},
   onNavigateToVideo: () -> Unit,
-  onNavigateToHistory: () -> Unit
+  onNavigateToHistory: () -> Unit,
+  onLogout: () -> Unit,
 ) {
   val navigationItems = listOf(
     NavigationItem("学习", icon = Icons.Filled.Home),
@@ -58,7 +59,8 @@ fun MainFrame(
         0 -> StudyScreen(
           onNavigateToArticle = onNavigateToArticle,
           onNavigateToVideo = onNavigateToVideo,
-          onNavigateToHistory = onNavigateToHistory
+          onNavigateToHistory = onNavigateToHistory,
+          onLogout = onLogout
         )
         1 -> TaskScreen()
         2 -> MineScreen()

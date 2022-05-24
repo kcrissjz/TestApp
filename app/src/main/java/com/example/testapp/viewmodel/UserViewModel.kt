@@ -37,4 +37,10 @@ class UserViewModel(context: Context) : ViewModel() {
       onBack()
     }
   }
+  fun clear(){
+    viewModelScope.launch {
+      userInfoManager.clear()
+      userInfo = null
+    }
+  }
 }

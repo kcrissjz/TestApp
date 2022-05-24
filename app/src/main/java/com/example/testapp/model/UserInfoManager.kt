@@ -33,4 +33,11 @@ class UserInfoManager(private val context: Context) {
       it[USERNAME] = userName
     }
   }
+
+  suspend fun clear(){
+    context.userStore.edit {
+      it[LOGGED] = false
+      it[USERNAME] = ""
+    }
+  }
 }

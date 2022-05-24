@@ -52,6 +52,9 @@ fun NavHostApp() {
               }else{
                 navController.navigate(Destinations.Login.route)
               }
+            },
+            onLogout = {
+              userViewModel.clear()
             }
           )
         }
