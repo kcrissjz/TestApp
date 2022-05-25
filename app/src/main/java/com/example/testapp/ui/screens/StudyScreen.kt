@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -29,6 +30,7 @@ import com.example.testapp.viewmodel.VideoViewModel
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import icu.bughub.app.app.extension.OnBottomReached
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,7 +47,11 @@ fun StudyScreen(
   val coroutineScope = rememberCoroutineScope()
   LaunchedEffect(Unit) {
     vm.categoryData()
-    articleViewModel.articeleData()
+    articleViewModel.fetchArticleList()
+  }
+  val lazyListState = rememberLazyListState()
+  lazyListState.OnBottomReached(buffer = 3) {
+    coroutineScope.launch { articleViewModel.loadMore()  }
   }
   Column(modifier = Modifier) {
     //标题栏
@@ -156,7 +162,7 @@ fun StudyScreen(
       state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
       onRefresh = { coroutineScope.launch {  articleViewModel.refresh()  } }
     ) {
-      LazyColumn() {
+      LazyColumn(state = lazyListState) {
         item {
           SwiperContent(vm)
         }
@@ -165,7 +171,7 @@ fun StudyScreen(
         }
         if (vm.currentTypeIndex == 0) {
           items(articleViewModel.list) { article ->
-            ArticleItem(loaded = articleViewModel.articeleLoaded, article = article, modifier = Modifier.clickable {
+            ArticleItem(loaded = articleViewModel.listLoaded, article = article, modifier = Modifier.clickable {
               onNavigateToArticle()
             })
           }

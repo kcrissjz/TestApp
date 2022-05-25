@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
-  var offset = 1
+  var pageOffset = 1
   var pageSize = 10
   val articleService = ArticleService.instance()
   //文章列表数据
@@ -64,29 +64,57 @@ class ArticleViewModel : ViewModel() {
   )
     private set
 
-  var  articeleLoaded = false
+  //骨架屏占位标志
+  var  listLoaded  by mutableStateOf(false)
+    private set
 
   //是否正在刷新
   var refreshing by mutableStateOf(false)
     private set
 
+  //是否还有更多
+  private var hasMore = false
 
-
-  fun articeleData(){
+  fun fetchArticleList(){
     viewModelScope.launch {
-      val response = articleService.articleList(offset,pageSize)
-      if (response.code == 0 && response.data?.size!! > 0){
-        list = response.data
-        articeleLoaded = true
+      val res = articleService.articleList(pageOffset = pageOffset, pageSize = pageSize)
+      if (res.code == 0 && res.data != null) {
+        val tmpList = mutableListOf<ArticleEntity>()
+        if (pageOffset != 1) {
+          tmpList.addAll(list)
+        }
+        tmpList.addAll(res.data)
+        //是否还有更多数据
+        hasMore = res.data.size == pageSize
+        list = tmpList
+        listLoaded = true
         refreshing = false
+      } else {
+        pageOffset--
+        if (pageOffset <= 1) {
+          pageOffset = 1
+        }
       }
     }
   }
-  fun refresh(){
-    offset = 1
+  /**
+   * 下拉刷新
+   *
+   */
+  suspend fun refresh() {
+    pageOffset = 1
+    //        listLoaded = false
     refreshing = true
-    articeleData()
+    fetchArticleList()
   }
+
+  suspend fun loadMore() {
+    if (hasMore) {
+      pageOffset++
+      fetchArticleList()
+    }
+  }
+
 
   //HTML 头部
   private val htmlHeader = """
