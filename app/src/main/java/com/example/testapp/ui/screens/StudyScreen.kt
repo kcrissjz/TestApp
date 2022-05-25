@@ -12,16 +12,15 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.testapp.model.entity.ArticleEntity
 import com.example.testapp.ui.components.*
 import com.example.testapp.ui.components.TopAppBar
 import com.example.testapp.viewmodel.ArticleViewModel
@@ -29,7 +28,8 @@ import com.example.testapp.viewmodel.MainViewmodel
 import com.example.testapp.viewmodel.VideoViewModel
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -42,6 +42,7 @@ fun StudyScreen(
   onNavigateToHistory: () -> Unit = {},
   onLogout: () -> Unit = {},
 ) {
+  val coroutineScope = rememberCoroutineScope()
   LaunchedEffect(Unit) {
     vm.categoryData()
     articleViewModel.articeleData()
@@ -122,7 +123,7 @@ fun StudyScreen(
 
 
     TabRow(
-      selectedTabIndex = vm.typeIndex,
+      selectedTabIndex = vm.currentTypeIndex,
       backgroundColor = Color.Transparent,
       contentColor = Color(0xff149ee7),
       indicator = {},
@@ -130,7 +131,7 @@ fun StudyScreen(
     ) {
       vm.types.forEachIndexed { index, type ->
         LeadingIconTab(
-          selected = vm.typeIndex == index,
+          selected = vm.currentTypeIndex == index,
           onClick = {
             vm.updateTypeIndex(index)
           },
@@ -151,7 +152,10 @@ fun StudyScreen(
       }
     }
 
-    SwipeRefresh(state = SwipeRefreshState(articleViewModel.isRefreshing), onRefresh = { articleViewModel.refresh() }) {
+    SwipeRefresh(
+      state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+      onRefresh = { coroutineScope.launch {  articleViewModel.refresh()  } }
+    ) {
       LazyColumn() {
         item {
           SwiperContent(vm)
@@ -159,7 +163,7 @@ fun StudyScreen(
         item {
           NotificationContent(vm = vm)
         }
-        if (vm.typeIndex == 0) {
+        if (vm.currentTypeIndex == 0) {
           items(articleViewModel.list) { article ->
             ArticleItem(loaded = articleViewModel.articeleLoaded, article = article, modifier = Modifier.clickable {
               onNavigateToArticle()

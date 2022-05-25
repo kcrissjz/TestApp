@@ -65,7 +65,12 @@ class ArticleViewModel : ViewModel() {
     private set
 
   var  articeleLoaded = false
-  var  isRefreshing = false
+
+  //是否正在刷新
+  var refreshing by mutableStateOf(false)
+    private set
+
+
 
   fun articeleData(){
     viewModelScope.launch {
@@ -73,13 +78,13 @@ class ArticleViewModel : ViewModel() {
       if (response.code == 0 && response.data?.size!! > 0){
         list = response.data
         articeleLoaded = true
-        isRefreshing = false
+        refreshing = false
       }
     }
   }
   fun refresh(){
     offset = 1
-    isRefreshing = true
+    refreshing = true
     articeleData()
   }
 

@@ -24,6 +24,10 @@ class MainViewmodel : ViewModel() {
   var categories by mutableStateOf(listOf(Category("","")))
 
 
+  //是否文章列表
+  var showArticleList by mutableStateOf(true)
+    private set
+
   suspend fun categoryData() {
     val categoryRes = homeService.category()
     if (categoryRes.code == 0) {
@@ -51,11 +55,12 @@ class MainViewmodel : ViewModel() {
   )
 
   //分类下标
-  var typeIndex by mutableStateOf(0)
+  var currentTypeIndex by mutableStateOf(0)
     private set
 
   fun updateTypeIndex(index: Int) {
-    typeIndex = index
+    currentTypeIndex = index
+    showArticleList = currentTypeIndex == 0
   }
 
   //轮播图
