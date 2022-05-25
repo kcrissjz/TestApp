@@ -1,6 +1,7 @@
 package com.example.testapp.network.service
 
 import com.example.testapp.model.entity.CategoryResponse
+import com.example.testapp.model.entity.SwiperResponse
 import com.example.testapp.network.Network
 import retrofit2.http.GET
 
@@ -10,4 +11,6 @@ interface HomeService {
   }
   @GET("category/list")
   suspend fun category():CategoryResponse
+  @GET("recommand/banner")
+  suspend fun banner(): SwiperResponse
 }

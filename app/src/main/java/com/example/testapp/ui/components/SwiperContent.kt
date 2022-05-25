@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,6 +17,7 @@ import com.example.testapp.viewmodel.MainViewmodel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.placeholder
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -29,7 +31,11 @@ fun SwiperContent(vm:MainViewmodel) {
 
     val pagerState = rememberPagerState(initialPage = initialIndex)
     val currentCoroutineScope = rememberCoroutineScope()
-    DisposableEffect(key1 = Unit){
+
+    DisposableEffect(Unit){
+        currentCoroutineScope.launch {
+            vm.swiperData()
+        }
         val timer = Timer()
         timer.schedule(object :TimerTask(){
             override fun run() {
@@ -57,7 +63,8 @@ fun SwiperContent(vm:MainViewmodel) {
             model = vm.swiperData[actualIndex].imageUrl, contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(7 / 3f),
+                .aspectRatio(7 / 3f)
+                .placeholder(visible = !vm.swiperLoaded, color = Color(0xFFCCCCCC)),
             contentScale = ContentScale.Crop
         )
     }

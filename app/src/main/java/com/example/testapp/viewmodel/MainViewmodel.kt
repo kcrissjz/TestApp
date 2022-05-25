@@ -18,6 +18,8 @@ class MainViewmodel : ViewModel() {
 
   var categoryLoaded by mutableStateOf(false)
     private set
+  var swiperLoaded by mutableStateOf(false)
+    private set
   //
   var categories by mutableStateOf(listOf(Category("","")))
 
@@ -57,13 +59,16 @@ class MainViewmodel : ViewModel() {
   }
 
   //轮播图
-  val swiperData = listOf(
-    SwiperEntity("https://docs.bughub.icu/compose/assets/banner1.webp"),
-    SwiperEntity("https://docs.bughub.icu/compose/assets/banner2.webp"),
-    SwiperEntity("https://docs.bughub.icu/compose/assets/banner3.webp"),
-    SwiperEntity("https://docs.bughub.icu/compose/assets/banner4.jpg"),
-    SwiperEntity("https://docs.bughub.icu/compose/assets/banner5.jpg"),
-  )
+  var swiperData by mutableStateOf(listOf(SwiperEntity("")))
+  suspend fun swiperData(){
+    val swiperEntityRes = homeService.banner()
+    if (swiperEntityRes.code == 0 && swiperEntityRes.data!=null){
+      swiperData = swiperEntityRes.data
+      swiperLoaded = true
+    }else{
+      val msg = swiperEntityRes.message
+    }
+  }
 
   val notificationData = listOf(
     "1dsfdsfad是大地发生的",
