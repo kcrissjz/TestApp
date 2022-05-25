@@ -28,6 +28,8 @@ import com.example.testapp.viewmodel.ArticleViewModel
 import com.example.testapp.viewmodel.MainViewmodel
 import com.example.testapp.viewmodel.VideoViewModel
 import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -149,24 +151,26 @@ fun StudyScreen(
       }
     }
 
-    LazyColumn() {
-      item {
-        SwiperContent(vm)
-      }
-      item {
-        NotificationContent(vm = vm)
-      }
-      if (vm.typeIndex == 0) {
-        items(articleViewModel.list) { article ->
-          ArticleItem(loaded = articleViewModel.articeleLoaded, article = article, modifier = Modifier.clickable {
-            onNavigateToArticle()
-          })
+    SwipeRefresh(state = SwipeRefreshState(articleViewModel.isRefreshing), onRefresh = { articleViewModel.refresh() }) {
+      LazyColumn() {
+        item {
+          SwiperContent(vm)
         }
-      } else {
-        items(videoViewModel.list) { video ->
-          VideoItem(video, modifier = Modifier.clickable {
-            onNavigateToVideo()
-          })
+        item {
+          NotificationContent(vm = vm)
+        }
+        if (vm.typeIndex == 0) {
+          items(articleViewModel.list) { article ->
+            ArticleItem(loaded = articleViewModel.articeleLoaded, article = article, modifier = Modifier.clickable {
+              onNavigateToArticle()
+            })
+          }
+        } else {
+          items(videoViewModel.list) { video ->
+            VideoItem(video, modifier = Modifier.clickable {
+              onNavigateToVideo()
+            })
+          }
         }
       }
     }

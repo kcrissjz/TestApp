@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.model.entity.ArticleEntity
 import com.example.testapp.network.service.ArticleService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
@@ -64,6 +65,7 @@ class ArticleViewModel : ViewModel() {
     private set
 
   var  articeleLoaded = false
+  var  isRefreshing = false
 
   fun articeleData(){
     viewModelScope.launch {
@@ -71,8 +73,14 @@ class ArticleViewModel : ViewModel() {
       if (response.code == 0 && response.data?.size!! > 0){
         list = response.data
         articeleLoaded = true
+        isRefreshing = false
       }
     }
+  }
+  fun refresh(){
+    offset = 1
+    isRefreshing = true
+    articeleData()
   }
 
   //HTML 头部
