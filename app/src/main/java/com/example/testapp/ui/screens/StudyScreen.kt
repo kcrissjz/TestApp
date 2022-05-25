@@ -42,6 +42,7 @@ fun StudyScreen(
 ) {
   LaunchedEffect(Unit) {
     vm.categoryData()
+    articleViewModel.articeleData()
   }
   Column(modifier = Modifier) {
     //标题栏
@@ -157,7 +158,7 @@ fun StudyScreen(
       }
       if (vm.typeIndex == 0) {
         items(articleViewModel.list) { article ->
-          ArticleItem(article, modifier = Modifier.clickable {
+          ArticleItem(loaded = articleViewModel.articeleLoaded, article = article, modifier = Modifier.clickable {
             onNavigateToArticle()
           })
         }

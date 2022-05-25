@@ -2,58 +2,78 @@ package com.example.testapp.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.testapp.model.entity.ArticleEntity
+import com.example.testapp.network.service.ArticleService
+import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
-
+  var offset = 1
+  var pageSize = 10
+  val articleService = ArticleService.instance()
   //文章列表数据
-  var list = listOf(
-    ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ),
-    ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
-    ), ArticleEntity(
-      title = "人社部向疫情防控期参与复工复产的劳动者表",
-      source = "“学习强国”学习平台",
-      timestamp = "2020-02-10"
+  var list by mutableStateOf(
+    listOf(
+      ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ),
+      ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      ), ArticleEntity(
+        title = "人社部向疫情防控期参与复工复产的劳动者表",
+        source = "“学习强国”学习平台",
+        timestamp = "2020-02-10"
+      )
     )
   )
     private set
+
+  var  articeleLoaded = false
+
+  fun articeleData(){
+    viewModelScope.launch {
+      val response = articleService.articleList(offset,pageSize)
+      if (response.code == 0 && response.data?.size!! > 0){
+        list = response.data
+        articeleLoaded = true
+      }
+    }
+  }
 
   //HTML 头部
   private val htmlHeader = """
